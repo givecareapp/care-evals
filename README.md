@@ -1,3 +1,5 @@
+> **Archived on 2026-10-31.** This dataset now lives in [research-bench/evals](https://github.com/givecareapp/research-bench/tree/main/evals), folded in at a7cde36f. The Hugging Face dataset [givecare/caregiver-evals](https://huggingface.co/datasets/givecare/caregiver-evals) is unchanged.
+
 ---
 license: cc-by-4.0
 task_categories:
