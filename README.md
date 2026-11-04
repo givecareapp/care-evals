@@ -7,7 +7,8 @@ Public evaluation dataset for caregiver-support AI, published on Hugging Face as
 License: CC-BY-4.0 ([`LICENSE`](LICENSE)). The benchmark runner and private held-out
 cases remain in the sibling [`invisiblebench`](../invisiblebench) repos.
 
-History: this repository preserves the separate `givecareapp/givecare-evals`
+History: this repository preserves the separate
+[`givecareapp/givecare-evals`](https://github.com/givecareapp/givecare-evals)
 history and the later public `invisiblebench/evals` additions. The old repository
 is archived read-only; this is now the public owner of the reusable dataset and
 its dependency-free validators.
@@ -97,7 +98,8 @@ separately as an EMA-3 reading.
 The instrument **definition** (question ids, prompts, GC domains, scale, and domain
 weights) is owned by [`@givecare/tools`](https://github.com/givecareapp/assessment).
 `data/instruments.json` is an exact byte-for-byte materialization of the
-verified `assessment` projection output (`assessment/data/instruments-export.json`). Update
+verified `assessment` projection output
+(`tools/assessment/data/instruments-export.json`). Update
 it only with
 `python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>`.
 The command verifies the shared ArtifactRef and exact digest through the
@@ -149,9 +151,11 @@ for case in cases:
 
 ## Validation
 
-No Python package install is required. Run the public unit tests from this
-checkout with `python3 -m unittest discover -s tests`. Workspace validation also
-requires the sibling `assessment` owner projection and the workspace protocol CLI.
+No Python package install is required. Run the public unit tests and standalone
+dataset validation from any checkout with `scripts/check.sh` (or
+`python3 -m unittest discover -s tests` and `python3 scripts/validate.py`).
+Workspace parity validation additionally requires the sibling
+`tools/assessment` owner projection and the workspace protocol CLI.
 
 ```bash
 python3 scripts/validate.py --tools-commit <full-assessment-commit>
@@ -164,9 +168,11 @@ and SMS-format rows with empty `expected_behaviors`, overbroad forbidden pattern
 multi-turn context, adapted-scenario identifying and high-specificity markers, and
 that stale benefits-program data has not been reintroduced.
 
-`--tools-commit` is required. It must identify one full commit reachable from
+When provided, `--tools-commit` must identify one full commit reachable from
 `assessment` local `main`. The validator reads committed bytes and rejects local
-instrument drift. It never selects the latest revision for the caller.
+instrument drift. It never selects the latest revision for the caller. Without
+that option, the validator still checks the public data and checked-in
+materialization without requiring the polyrepo.
 
 See [docs/evidence.md](./docs/evidence.md) for reviewed intake and projection.
 

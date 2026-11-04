@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate givecare-evals JSON/JSONL artifacts.
+"""Validate Care Evals JSON/JSONL artifacts.
 
 The repo is intentionally dependency-free; this script uses only stdlib Python.
 """
@@ -29,7 +29,6 @@ def _workspace_root() -> Path:
     raise RuntimeError("cannot locate GiveCare workspace; set GIVECARE_ROOT")
 
 
-WORKSPACE = _workspace_root()
 DATA = ROOT / "data"
 
 SPLITS = [
@@ -369,8 +368,9 @@ def resolve_verified_tools_projection(
 
 def check_instrument_parity(*, tools_commit: str) -> None:
     """Require the exact committed projection owned by assessment."""
-    tools_root = WORKSPACE / "tools" / "assessment"
-    protocol_cli = WORKSPACE / "scripts" / "givecare_protocol.py"
+    workspace = _workspace_root()
+    tools_root = workspace / "tools" / "assessment"
+    protocol_cli = workspace / "scripts" / "givecare_protocol.py"
     try:
         export_bytes = resolve_verified_tools_projection(
             tools_root=tools_root,
@@ -424,14 +424,19 @@ def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Validate GiveCare Evals owner artifacts.")
     parser.add_argument(
         "--tools-commit",
-        required=True,
-        help="exact assessment owner commit",
+        help=(
+            "exact assessment owner commit; when omitted, validate the public dataset "
+            "and its checked-in instrument materialization without a GiveCare workspace"
+        ),
     )
     args = parser.parse_args(argv)
     record_count = validate_gold_cases()
 
     validate_instruments()
-    check_instrument_parity(tools_commit=args.tools_commit)
+    if args.tools_commit:
+        check_instrument_parity(tools_commit=args.tools_commit)
+    else:
+        print("ok: standalone validation (assessment projection parity not requested)")
     print(f"ok: {record_count} eval records, {len(EXPECTED_INSTRUMENTS)} instruments")
 
 

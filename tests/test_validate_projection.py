@@ -8,6 +8,11 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,6 +48,27 @@ class PublicDatasetTests(unittest.TestCase):
         self.assertNotIn("domain_labels", overlay["scoring"]["composite"])
         for value in overlay["instruments"].values():
             self.assertFalse({"name", "questions"} & value.keys())
+
+    def test_public_checkout_validates_outside_workspace(self):
+        """The public export remains useful when cloned without the polyrepo."""
+        with tempfile.TemporaryDirectory(prefix="care-evals-standalone-") as directory:
+            checkout = Path(directory) / "care-evals"
+            shutil.copytree(
+                ROOT,
+                checkout,
+                ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"),
+            )
+            environment = os.environ.copy()
+            environment.pop("GIVECARE_ROOT", None)
+            result = subprocess.run(
+                [sys.executable, "scripts/validate.py"],
+                cwd=checkout,
+                env=environment,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr or result.stdout)
 
 
 if __name__ == "__main__":

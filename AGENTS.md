@@ -51,13 +51,16 @@ consumer reads `data/all.jsonl` only through a Git-addressed
 
 ## Proof
 
-Before handoff run the unit tests and `scripts/validate.py --tools-commit <full-assessment-commit>`
-(see Commands). Report only checks that ran.
+Before handoff run `scripts/check.sh`. In the workspace, also run
+`scripts/validate.py --tools-commit <full-assessment-commit>` to prove exact
+projection parity. Report only checks that ran.
 
 ## Safety
 
 - Contribute no private conversations, production traces, raw forum text, usernames,
-  identifying links, unlicensed instruments (licensing wall: `assessment/AGENTS.md` § Safety; CWBS-14 content is excluded, redistribution unconfirmed), benefits catalogs, or private prompts
+  identifying links, unlicensed instruments (licensing wall:
+  `tools/assessment/AGENTS.md` § Safety; CWBS-14 content is excluded,
+  redistribution unconfirmed), benefits catalogs, or private prompts
   and product internals ([`CONTRIBUTING.md`](CONTRIBUTING.md)).
 - No runner, verifier, scoring implementation, or live policy system here. A
   failure signal never promotes itself into public data.
