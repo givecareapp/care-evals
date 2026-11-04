@@ -31,7 +31,7 @@ Do not contribute:
 ## Add a gold case
 
 Do not edit `data/*.jsonl` directly without review. Create one
-`gc-evals.gold-case-intake/v1` file. Bind it to a verified failure artifact.
+`care-evals.gold-case-intake/v1` file. Bind it to a verified failure artifact.
 Confirm that it is anonymized, public-safe, and licensed for redistribution.
 
 Then follow the reviewed intake and rebuild flow in `docs/evidence.md`: a
@@ -41,7 +41,7 @@ human appends the reviewed gold case to its source split, then
 After the edit, run:
 
 ```bash
-python3 scripts/validate.py --tools-commit <full-gc-tools-commit>
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
 ```
 
 ## Gold-case template

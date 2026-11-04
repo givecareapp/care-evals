@@ -10,12 +10,26 @@ import argparse
 import copy
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _workspace_root() -> Path:
+    configured = os.environ.get("GIVECARE_ROOT")
+    if configured:
+        return Path(configured).resolve()
+    for candidate in Path(__file__).resolve().parents:
+        if (candidate / "scripts/givecare_protocol.py").is_file():
+            return candidate
+    raise RuntimeError("cannot locate GiveCare workspace; set GIVECARE_ROOT")
+
+
+WORKSPACE = _workspace_root()
 DATA = ROOT / "data"
 
 SPLITS = [
@@ -310,9 +324,9 @@ def resolve_verified_tools_projection(
             "--access",
             "public",
             "--owner-repo",
-            "gc-tools",
+            "assessment",
             "--artifact-owner",
-            "tools.assessments",
+            "assessment",
             "--artifact-id",
             "data/instruments-export.json",
         ],
@@ -341,7 +355,7 @@ def resolve_verified_tools_projection(
     digest = hashlib.sha256(export_bytes).hexdigest()
     expected_ref = {
         "schema_version": "givecare.artifact-ref/v1",
-        "owner": "tools.assessments",
+        "owner": "assessment",
         "kind": "owner-projection",
         "artifact_id": "data/instruments-export.json",
         "revision": f"git:{owner_commit}",
@@ -354,9 +368,9 @@ def resolve_verified_tools_projection(
 
 
 def check_instrument_parity(*, tools_commit: str) -> None:
-    """Require the exact committed projection owned by gc-tools."""
-    tools_root = ROOT.parent / "gc-tools"
-    protocol_cli = ROOT.parent / "scripts" / "givecare_protocol.py"
+    """Require the exact committed projection owned by assessment."""
+    tools_root = WORKSPACE / "tools" / "assessment"
+    protocol_cli = WORKSPACE / "scripts" / "givecare_protocol.py"
     try:
         export_bytes = resolve_verified_tools_projection(
             tools_root=tools_root,
@@ -370,14 +384,14 @@ def check_instrument_parity(*, tools_commit: str) -> None:
     if materialization != export_bytes:
         fail(
             "data/instruments.json is not the exact byte-for-byte materialization of "
-            "the committed gc-tools projection; run scripts/sync_instruments.py"
+            "the committed assessment projection; run scripts/sync_instruments.py"
         )
-    print(f"ok: instrument parity with gc-tools git:{tools_commit}")
+    print(f"ok: instrument parity with assessment git:{tools_commit}")
 
 
 def validate_source_splits() -> tuple[int, list[dict[str, Any]]]:
     if (DATA / "benefits-programs.jsonl").exists():
-        fail("data/benefits-programs.jsonl should not live in givecare-evals; use gc-benefits")
+        fail("data/benefits-programs.jsonl should not live in invisiblebench evals; benefits data belongs to benefits")
 
     ids: set[str] = set()
     merged: list[dict[str, Any]] = []
@@ -411,7 +425,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument(
         "--tools-commit",
         required=True,
-        help="exact gc-tools owner commit",
+        help="exact assessment owner commit",
     )
     args = parser.parse_args(argv)
     record_count = validate_gold_cases()

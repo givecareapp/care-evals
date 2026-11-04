@@ -14,14 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PublicDatasetTests(unittest.TestCase):
-    def test_module_declares_the_tools_consume_and_gold_case_produce(self):
+    def test_care_evals_module_declares_the_tools_consume_and_public_produce(self):
         declaration = json.loads((ROOT / ".givecare/module.json").read_text())
         self.assertIn(
-            {"id": "@givecare/tools.InstrumentExport", "from": "gc-tools"},
+            {"id": "@givecare/tools.InstrumentExport", "from": "assessment"},
             declaration["consumes"],
         )
         self.assertIn(
-            {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["gc-bench"]},
+            {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["invisiblebench"]},
             declaration["produces"],
         )
 

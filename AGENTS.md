@@ -1,16 +1,16 @@
-# AGENTS.md — gc-evals
+# AGENTS.md — care-evals
 
 Type: reference.
 
 This repo owns public eval records and instrument distribution. Root workspace
 `AGENTS.md` rules apply; this file adds local gates. Owner intent:
-`/home/deploy/wiki/aims/givecare-instruments.md`.
+`/home/deploy/wiki/aims/givecare-bench.md`.
 
 ## Layout
 
 - `data/`: JSONL splits `core-behaviors`, `red-team`, `reddit-caregivers`,
   `multi-turn`; generated `all.jsonl` (their concatenation, in that order);
-  `instruments.json` (byte copy of the gc-tools projection) and
+  `instruments.json` (byte copy of the assessment projection) and
   `instruments-overlay.json` (Evals-only public packaging fields).
 - `scripts/`: `validate.py`, `project_gold_cases.py`, `sync_instruments.py`,
   `read_instruments.py` (public projection-plus-overlay reader).
@@ -26,23 +26,22 @@ Every JSONL record has `id`, `split`, `category`, `subcategory`, `input`,
 
 ```bash
 scripts/check.sh    # offline: unittest discover
-python3 scripts/validate.py --tools-commit <full-gc-tools-commit>
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
 python3 scripts/project_gold_cases.py     # rebuild data/all.jsonl
-python3 scripts/sync_instruments.py --owner-commit <full-gc-tools-commit>
+python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>
 ```
 
 ## Authority
 
-- Public eval records (`data/*.jsonl`) belong here. Scoring semantics belong to
-  `gc-tools`, runners, adapters, and judge prompts to `gc-bench`, benefits data to
-  `gc-benefits`, production runtime to `gc-sms`.
-- `evals.gold-cases.apply` is the only gold-case authoring path. It is human-gated:
+- Public eval records (`data/*.jsonl`) belong here. Instrument definitions belong
+  to `assessment`; runners, adapters, and judge prompts belong to `invisiblebench`;
+  benefits data belongs to `benefits`; the production runtime belongs to `mira`.
+- A reviewed gold-case edit is the only gold-case authoring path. It is human-gated:
   a reviewer applies one verified, public-safe intake as an ordinary Git edit.
   There is no automated writer, and a reviewed gold case is only added, never deleted.
 - `data/all.jsonl` is written only by `scripts/project_gold_cases.py`.
 - `data/instruments.json` is written only by `scripts/sync_instruments.py` from one
-  verified gc-tools projection at an exact owner commit
-  (`evals.instruments.sync-owner-projection`).
+  verified assessment projection at an exact owner commit.
 
 ## Required path
 
@@ -52,13 +51,13 @@ consumer reads `data/all.jsonl` only through a Git-addressed
 
 ## Proof
 
-Before handoff run the unit tests and `scripts/validate.py --tools-commit <full-gc-tools-commit>`
+Before handoff run the unit tests and `scripts/validate.py --tools-commit <full-assessment-commit>`
 (see Commands). Report only checks that ran.
 
 ## Safety
 
 - Contribute no private conversations, production traces, raw forum text, usernames,
-  identifying links, unlicensed instruments (licensing wall: `gc-tools/AGENTS.md` § Safety; CWBS-14 content is excluded, redistribution unconfirmed), benefits catalogs, or private prompts
+  identifying links, unlicensed instruments (licensing wall: `assessment/AGENTS.md` § Safety; CWBS-14 content is excluded, redistribution unconfirmed), benefits catalogs, or private prompts
   and product internals ([`CONTRIBUTING.md`](CONTRIBUTING.md)).
 - No runner, verifier, scoring implementation, or live policy system here. A
   failure signal never promotes itself into public data.
@@ -69,13 +68,13 @@ Before handoff run the unit tests and `scripts/validate.py --tools-commit <full-
 ## Gotchas
 
 - `data/all.jsonl` is generated; never hand-edit it.
-- `data/instruments.json` is a byte copy of the Tools projection, not an Evals edit;
+- `data/instruments.json` is a byte copy of the assessment projection, not an Evals edit;
   the validator rejects drift.
-- `--tools-commit` must be a full commit reachable in the sibling `gc-tools`.
+- `--tools-commit` must be a full commit reachable in the workspace `assessment` repo.
 
 ## Pointers
 
 - Workspace map: `python3 /home/deploy/repos/givecare/scripts/givecare_protocol.py map`
 - `docs/evidence.md`: gold-case intake and rebuild.
-- `gc-bench` imports the owner projection as candidates and owns execution and
-  verdicts. `gc-tools` owns executable scoring semantics.
+- `invisiblebench` imports the owner projection as candidates and owns execution
+  and verdicts. `assessment` owns executable instrument definitions and scoring.

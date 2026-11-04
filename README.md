@@ -1,37 +1,31 @@
-> **Archived on 2026-10-31.** This dataset now lives in [research-bench/evals](https://github.com/givecareapp/research-bench/tree/main/evals), folded in at a7cde36f. The Hugging Face dataset [givecare/caregiver-evals](https://huggingface.co/datasets/givecare/caregiver-evals) is unchanged.
-
----
-license: cc-by-4.0
-task_categories:
-  - text-generation
-  - text-classification
-language:
-  - en
-tags:
-  - caregiving
-  - health-ai
-  - ai-safety
-  - red-team
-  - evaluation
-  - trauma-informed
-  - social-determinants
-  - sms
-pretty_name: GiveCare Evals
-size_categories:
-  - n<1K
----
-
 <!-- Diátaxis: reference -->
 
-# GiveCare Evals
+# GiveCare Care Evals
+
+Public evaluation dataset for caregiver-support AI, published on Hugging Face as
+[`givecare/caregiver-evals`](https://huggingface.co/datasets/givecare/caregiver-evals).
+License: CC-BY-4.0 ([`LICENSE`](LICENSE)). The benchmark runner and private held-out
+cases remain in the sibling [`invisiblebench`](../invisiblebench) repos.
+
+History: this repository preserves the separate `givecareapp/givecare-evals`
+history and the later public `invisiblebench/evals` additions. The old repository
+is archived read-only; this is now the public owner of the reusable dataset and
+its dependency-free validators.
+
+Held-out rule: every case here is public, permanently. A public case never
+becomes a held-out case; held-out scenarios are authored only in
+`invisiblebench-private/heldout/`, and its check refuses any held-out case that
+matches a public case here. A held-out case may retire into public; never the reverse.
 
 <!-- Diátaxis: reference -->
 
 Public eval data for caregiver-support AI systems.
 
-This repo contains SMS-style test cases for safety, boundaries, trauma-informed response, adversarial prompts, realistic caregiver messages, and multi-turn continuity. It also includes public caregiver SDOH instruments used to test assessment flows.
+This folder contains SMS-style test cases for safety, boundaries, trauma-informed response, adversarial prompts, realistic caregiver messages, and multi-turn continuity. It also includes public caregiver SDOH instruments used to test assessment flows.
 
-The goal is narrow: help builders test whether an assistant can respond safely to family caregivers without pretending to be a clinician, leaking instructions, minimizing distress, or giving harmful advice.
+The goal is narrow: help builders test whether an assistant can respond safely to
+family caregivers without pretending to be a clinician, leaking instructions,
+minimizing distress, or giving harmful advice.
 
 A human-reviewed edit is the only write path for public gold cases. It admits
 one verified, human-approved case into one owner split. `scripts/project_gold_cases.py`
@@ -46,13 +40,14 @@ rebuilds the digest-bound `data/all.jsonl` projection from the splits.
 | `data/reddit-caregivers.jsonl` | Realistic caregiver scenarios adapted from public caregiver posts and rewritten into short first-person messages |
 | `data/multi-turn.jsonl` | Continuity scenarios that assume prior context, memory, or seeded turn state |
 | `data/all.jsonl` | Canonical concatenation of the four eval splits |
-| `data/instruments.json` | Exact verified `gc-tools` projection materialization |
+| `data/instruments.json` | Exact verified projection of `@givecare/tools.InstrumentExport` (owned by assessment, not by evals) |
 | `data/instruments-overlay.json` | Evals-only public packaging and scoring prose |
 
 ## What is not included
 
-- Benefits program catalog or eligibility rules. Those live in GiveCare's internal benefits pipeline.
-- Production benchmark runner, model adapters, or judge code. Use this repo as data, not as a runner.
+- Benefits program catalog or eligibility rules. Those live in GiveCare's benefits pipeline.
+- Production benchmark runner, model adapters, or judge code. Use this repo as data,
+  not as a runner; those remain in `invisiblebench`.
 - Private runtime traces, prompts, user data, or memory records.
 - CWBS-14 content. GiveCare has permission to use it but does not currently use it in the product. Redistribution rights are not confirmed.
 
@@ -100,11 +95,11 @@ separately as an EMA-3 reading.
 | `gc_sdoh30` | 30-item bank | GC-SDOH-30 targeted branch, four additional questions in one flagged domain |
 
 The instrument **definition** (question ids, prompts, GC domains, scale, and domain
-weights) is owned by [`@givecare/tools`](https://github.com/givecareapp/givecare-tools).
+weights) is owned by [`@givecare/tools`](https://github.com/givecareapp/assessment).
 `data/instruments.json` is an exact byte-for-byte materialization of the
-verified `gc-tools` projection output (`gc-tools/data/instruments-export.json`). Update
+verified `assessment` projection output (`assessment/data/instruments-export.json`). Update
 it only with
-`python3 scripts/sync_instruments.py --owner-commit <full-gc-tools-commit>`.
+`python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>`.
 The command verifies the shared ArtifactRef and exact digest through the
 workspace `projection-ref` command. It never scans run history and has no
 direct-file fallback. `data/instruments-overlay.json`
@@ -156,16 +151,21 @@ for case in cases:
 
 No Python package install is required. Run the public unit tests from this
 checkout with `python3 -m unittest discover -s tests`. Workspace validation also
-requires the sibling `gc-tools` owner projection and the workspace protocol CLI.
+requires the sibling `assessment` owner projection and the workspace protocol CLI.
 
 ```bash
-python3 scripts/validate.py --tools-commit <full-gc-tools-commit>
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
 ```
 
-The validator checks JSONL parseability, non-shrinking split floors, required fields, duplicate IDs, `all.jsonl` consistency, instrument shape and scoring semantics, exact byte parity with the verified committed `../gc-tools` projection, high-risk and SMS-format rows with empty `expected_behaviors`, overbroad forbidden patterns, multi-turn context, adapted-scenario identifying and high-specificity markers, and that stale benefits-program data has not been reintroduced.
+The validator checks JSONL parseability, non-shrinking split floors, required fields,
+duplicate IDs, `all.jsonl` consistency, instrument shape and scoring semantics,
+exact byte parity with the verified committed `assessment` projection, high-risk
+and SMS-format rows with empty `expected_behaviors`, overbroad forbidden patterns,
+multi-turn context, adapted-scenario identifying and high-specificity markers, and
+that stale benefits-program data has not been reintroduced.
 
 `--tools-commit` is required. It must identify one full commit reachable from
-`gc-tools` local `main`. The validator reads committed bytes and rejects local
+`assessment` local `main`. The validator reads committed bytes and rejects local
 instrument drift. It never selects the latest revision for the caller.
 
 See [docs/evidence.md](./docs/evidence.md) for reviewed intake and projection.

@@ -1,14 +1,13 @@
 {
   "schema_version": "givecare.module/v2",
-  "repository": "gc-evals",
-  "owns": "Public eval records and instrument distribution",
+  "repository": "care-evals",
+  "owns": "Public caregiver eval records, instrument distribution, and dependency-free validators",
   "check": "scripts/check.sh",
   "produces": [
-    {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["gc-bench"]},
-    {"id": "evals.gold-cases.apply", "path": "docs/evidence.md", "for": ["gc-sms"], "gate": "human"}
+    {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["invisiblebench"]}
   ],
   "consumes": [
-    {"id": "@givecare/tools.InstrumentExport", "from": "gc-tools"},
+    {"id": "@givecare/tools.InstrumentExport", "from": "assessment"},
     {"id": "givecare.protocol", "from": "."}
   ]
 }

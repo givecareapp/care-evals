@@ -2,9 +2,10 @@
 
 Type: explanation.
 
-GiveCare Evals is useful today as a small public dataset. It is not a benchmark
-runner: executable harnesses, model adapters, judge prompts, scoring scripts,
-baseline scorecards, and benchmark reports belong in `../gc-bench`.
+GiveCare Care Evals is useful today as a small public dataset. It is not a
+benchmark runner: executable harnesses, model adapters, judge prompts, scoring
+scripts, baseline scorecards, and benchmark reports belong in the sibling
+`invisiblebench` repository.
 
 ## Biggest gaps
 
@@ -14,7 +15,7 @@ baseline scorecards, and benchmark reports belong in `../gc-bench`.
      per-case safety category labels.
 
 2. **Benchmark handoff**
-   - Current state: `../gc-bench` owns runners, model adapters, judge prompts,
+   - Current state: `../invisiblebench` owns runners, model adapters, judge prompts,
      scoring, reports, and baseline scorecards.
    - Gap: this repo should document clean handoff expectations for candidate
      scenario material without adding executable benchmark logic here.
@@ -36,7 +37,7 @@ baseline scorecards, and benchmark reports belong in `../gc-bench`.
 
 - Split `expected_behaviors` into structured criteria with IDs and severity.
 - Add `severity`, `risk_area`, and `judge_notes` fields without breaking existing rows.
-- Document the `gc-evals` -> `gc-bench` handoff for candidate scenarios,
+- Document the `care-evals` -> `invisiblebench` handoff for candidate scenarios,
   including where benchmark runners, scoring, baselines, and reports live.
 - Tighten GitHub / Hugging Face packaging notes for owner-controlled
   distribution.

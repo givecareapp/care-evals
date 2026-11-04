@@ -2,7 +2,7 @@
 
 Type: how-to.
 
-There is no automated write adapter for `evals.gold-cases.apply`. The owner
+There is no automated write adapter for `care-evals.gold-case.apply`. The owner
 declaration binds it to `human-review`: a reviewer applies one strict GiveCare
 learning Trace, bound to one public-safe gold case, as an ordinary Git edit.
 
@@ -10,7 +10,7 @@ Before review, validate the Trace with the shared root
 `givecare_protocol.py trace --show-restricted` validator. That validator owns
 the shared schema, receipt rules, hashes, and historical module pins. The
 Trace's `intent_contract` must equal the exact human-gated
-`evals.gold-cases.apply` capability. The reviewer then checks the proposal
+`care-evals.gold-case.apply` capability. The reviewer then checks the proposal
 source, release rules, and the gold case by hand.
 
 ## Intake contract
@@ -25,18 +25,18 @@ Create a JSON file with this exact shape:
     "module_refs": [
       {
         "schema_version": "givecare.artifact-ref/v1",
-        "owner": "evals.dataset",
+        "owner": "care-evals",
         "kind": "module-declaration",
-        "artifact_id": "gc-evals/.givecare/module.json",
+        "artifact_id": ".givecare/module.json",
         "revision": "git:1111111111111111111111111111111111111111",
         "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "access": "workspace"
       },
       {
         "schema_version": "givecare.artifact-ref/v1",
-        "owner": "gc-sms.care",
+        "owner": "mira",
         "kind": "module-declaration",
-        "artifact_id": "gc-sms/.givecare/module.json",
+        "artifact_id": "mira/.givecare/module.json",
         "revision": "git:2222222222222222222222222222222222222222",
         "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
         "access": "workspace"
@@ -45,16 +45,16 @@ Create a JSON file with this exact shape:
     "intent": {
       "schema_version": "givecare.loop-intent/v1",
       "loop_id": "learning:example",
-      "owner": "evals.dataset",
-      "capability": "evals.gold-cases.apply",
+        "owner": "care-evals",
+          "capability": "care-evals.gold-case.apply",
       "objective": "Prevent recurrence of a verified medication-boundary failure.",
-      "action": "Apply one reviewed gold_case change through evals.gold-cases.apply.",
+          "action": "Apply one reviewed gold_case change through care-evals.gold-case.apply.",
       "expected_observation": "The public regression fails on direct dosing advice.",
       "stop_condition": "Stop after one focused gold case passes owner validation.",
       "input_refs": [
         {
           "schema_version": "givecare.artifact-ref/v1",
-          "owner": "gc-sms.care",
+          "owner": "mira",
           "kind": "learning-proposal-projection",
           "artifact_id": "observation:example",
           "revision": "git:example",
@@ -70,15 +70,15 @@ Create a JSON file with this exact shape:
         "schema_version": "givecare.loop-receipt/v1",
         "receipt_id": "proposal:learning:example",
         "loop_id": "learning:example",
-        "owner": "gc-sms.care",
+        "owner": "mira",
         "phase": "proposal",
         "status": "completed",
         "operation": "care.learning.propose",
         "intent_sha256": "853051f52ae348ef34afc5913cbd84a476a1196022070322e280f410c73b5075",
-        "actor": {"kind": "service", "id": "gc-sms.operator-adapter"},
+        "actor": {"kind": "service", "id": "mira.operator-adapter"},
         "native_ref": {
           "schema_version": "givecare.artifact-ref/v1",
-          "owner": "gc-sms.care",
+          "owner": "mira",
           "kind": "learning-proposal-projection",
           "artifact_id": "observation:example",
           "revision": "git:example",
@@ -89,7 +89,7 @@ Create a JSON file with this exact shape:
         "output_refs": [
           {
             "schema_version": "givecare.artifact-ref/v1",
-            "owner": "gc-sms.care",
+            "owner": "mira",
             "kind": "learning-proposal-projection",
             "artifact_id": "observation:example",
             "revision": "git:example",
@@ -128,7 +128,7 @@ Create a JSON file with this exact shape:
 
 The Trace carries evidence references only. Never copy a private prompt,
 runtime trace payload, or conversation into this repo. The intent target must
-be `evals.dataset` and `evals.gold-cases.apply`. The mutable lever must be
+be `care-evals.dataset` and `care-evals.gold-case.apply`. The mutable lever must be
 `gold_case`.
 
 ## Apply one reviewed gold case
@@ -141,7 +141,7 @@ rights, and case wording before editing the file. Exact-plan human approval
 remains required; there is no automated writer to hold that check for you.
 
 ```bash
-python3 scripts/validate.py --tools-commit <full-gc-tools-commit>
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
 python3 scripts/project_gold_cases.py
 ```
 
@@ -155,7 +155,7 @@ Run this after every edit to a split file. It is also the repair path when
 
 ```bash
 python3 scripts/project_gold_cases.py
-python3 scripts/validate.py --tools-commit <full-gc-tools-commit>
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
 ```
 
 Inspect the result, then commit the validated projection on `main`. Consumers

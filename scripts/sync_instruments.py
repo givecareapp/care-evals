@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize one exact committed gc-tools instrument projection."""
+"""Materialize one exact committed assessment instrument projection."""
 
 from __future__ import annotations
 
@@ -11,8 +11,20 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
 ROOT = SCRIPTS.parent
-GIVECARE_ROOT = ROOT.parent
-TOOLS_ROOT = GIVECARE_ROOT / "gc-tools"
+
+
+def _workspace_root() -> Path:
+    configured = os.environ.get("GIVECARE_ROOT")
+    if configured:
+        return Path(configured).resolve()
+    for candidate in Path(__file__).resolve().parents:
+        if (candidate / "scripts/givecare_protocol.py").is_file():
+            return candidate
+    raise RuntimeError("cannot locate GiveCare workspace; set GIVECARE_ROOT")
+
+
+GIVECARE_ROOT = _workspace_root()
+TOOLS_ROOT = GIVECARE_ROOT / "tools" / "assessment"
 PROTOCOL_CLI = GIVECARE_ROOT / "scripts" / "givecare_protocol.py"
 TARGET = ROOT / "data" / "instruments.json"
 
@@ -64,7 +76,7 @@ def materialize(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Sync the exact verified gc-tools instrument projection."
+        description="Sync the exact verified assessment instrument projection."
     )
     parser.add_argument("--owner-commit", required=True)
     args = parser.parse_args(argv)
