@@ -29,7 +29,7 @@ class PublicDatasetTests(unittest.TestCase):
             {
                 "id": "gc-evals.gold-case/v1",
                 "path": "data/all.jsonl",
-                "for": ["invisiblebench", "invisiblebench-private"],
+                "for": ["invisiblebench-private"],
             },
             declaration["produces"],
         )
