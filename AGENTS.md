@@ -59,7 +59,7 @@ projection parity. Report only checks that ran.
 
 - Contribute no private conversations, production traces, raw forum text, usernames,
   identifying links, unlicensed instruments (licensing wall:
-  `tools/assessment/AGENTS.md` § Safety; CWBS-14 content is excluded,
+  [assessment safety rules](../../../tools/assessment/AGENTS.md) § Safety; CWBS-14 content is excluded,
   redistribution unconfirmed), benefits catalogs, or private prompts
   and product internals ([`CONTRIBUTING.md`](CONTRIBUTING.md)).
 - No runner, verifier, scoring implementation, or live policy system here. A

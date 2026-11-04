@@ -4,7 +4,7 @@
   "owns": "Public caregiver eval records, instrument distribution, and dependency-free validators",
   "check": "scripts/check.sh",
   "produces": [
-    {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["invisiblebench"]}
+    {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["invisiblebench", "invisiblebench-private"]}
   ],
   "consumes": [
     {"id": "@givecare/tools.InstrumentExport", "from": "assessment"},

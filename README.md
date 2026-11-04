@@ -3,13 +3,13 @@
 # GiveCare Care Evals
 
 Public evaluation dataset for caregiver-support AI, published on Hugging Face as
-[`givecare/caregiver-evals`](https://huggingface.co/datasets/givecare/caregiver-evals).
+[givecare/caregiver-evals](https://huggingface.co/datasets/givecare/caregiver-evals).
 License: CC-BY-4.0 ([`LICENSE`](LICENSE)). The benchmark runner and private held-out
 cases remain in the sibling [`invisiblebench`](../invisiblebench) repos.
 
 History: this repository preserves the separate
-[`givecareapp/givecare-evals`](https://github.com/givecareapp/givecare-evals)
-history and the later public `invisiblebench/evals` additions. The old repository
+[givecareapp/givecare-evals history](https://github.com/givecareapp/givecare-evals)
+and later public additions from [InvisibleBench](../invisiblebench). The old repository
 is archived read-only; this is now the public owner of the reusable dataset and
 its dependency-free validators.
 
@@ -96,10 +96,10 @@ separately as an EMA-3 reading.
 | `gc_sdoh30` | 30-item bank | GC-SDOH-30 targeted branch, four additional questions in one flagged domain |
 
 The instrument **definition** (question ids, prompts, GC domains, scale, and domain
-weights) is owned by [`@givecare/tools`](https://github.com/givecareapp/assessment).
+weights) is owned by [@givecare/tools](https://github.com/givecareapp/assessment).
 `data/instruments.json` is an exact byte-for-byte materialization of the
 verified `assessment` projection output
-(`tools/assessment/data/instruments-export.json`). Update
+the [assessment projection](../../../tools/assessment/data/instruments-export.json). Update
 it only with
 `python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>`.
 The command verifies the shared ArtifactRef and exact digest through the

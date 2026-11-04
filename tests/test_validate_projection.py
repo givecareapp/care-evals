@@ -26,7 +26,11 @@ class PublicDatasetTests(unittest.TestCase):
             declaration["consumes"],
         )
         self.assertIn(
-            {"id": "gc-evals.gold-case/v1", "path": "data/all.jsonl", "for": ["invisiblebench"]},
+            {
+                "id": "gc-evals.gold-case/v1",
+                "path": "data/all.jsonl",
+                "for": ["invisiblebench", "invisiblebench-private"],
+            },
             declaration["produces"],
         )
 
