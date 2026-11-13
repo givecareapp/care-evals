@@ -16,6 +16,9 @@ instructions apply.
   `read_instruments.py` own validation, projection and reads.
 - InvisibleBench owns runners, adapters and judge prompts. Assessment owns
   instrument definitions. Benefits and Mira own their respective domains.
+- InvisibleBench Private consumes the gold-case projection for private
+  evaluation and held-out disjointness checks. The public runner does not
+  consume this projection as a private candidate feed.
 
 ## Proof
 
