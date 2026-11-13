@@ -1,6 +1,5 @@
 node_modules/
 .hound/
-.evidence/
 .claude/
 .codex/
 .ruff_cache/

@@ -2,82 +2,39 @@
 
 Type: reference.
 
-This repo owns public eval records and instrument distribution. Root workspace
-`AGENTS.md` rules apply; this file adds local gates. Owner intent:
-`/home/deploy/wiki/aims/givecare-bench.md`.
+This independent repository owns public caregiver evaluation records, validators
+and instrument distribution. Global, workspace and [Safety](../../AGENTS.md)
+instructions apply.
 
-## Layout
+## Ownership
 
-- `data/`: JSONL splits `core-behaviors`, `red-team`, `reddit-caregivers`,
-  `multi-turn`; generated `all.jsonl` (their concatenation, in that order);
-  `instruments.json` (byte copy of the assessment projection) and
-  `instruments-overlay.json` (Evals-only public packaging fields).
-- `scripts/`: `validate.py`, `project_gold_cases.py`, `sync_instruments.py`,
-  `read_instruments.py` (public projection-plus-overlay reader).
-- `tests/`: unit tests. `docs/evidence.md`: gold-case intake and rebuild (how-to).
-- `README.md` dataset card; `ROADMAP.md`; `CONTRIBUTING.md`; `SECURITY.md`;
-  `.givecare/module.json`.
-
-Every JSONL record has `id`, `split`, `category`, `subcategory`, `input`,
-`expected_behaviors`, `forbidden_patterns`; `multi-turn` also carries
-`context.prior_state`. Inputs are anonymized and usable without private context.
-
-## Commands
-
-```bash
-scripts/check.sh    # offline: unittest discover
-python3 scripts/validate.py --tools-commit <full-assessment-commit>
-python3 scripts/project_gold_cases.py     # rebuild data/all.jsonl
-python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>
-```
-
-## Authority
-
-- Public eval records (`data/*.jsonl`) belong here. Instrument definitions belong
-  to `assessment`; runners, adapters, and judge prompts belong to `invisiblebench`;
-  benefits data belongs to `benefits`; the production runtime belongs to `mira`.
-- A reviewed gold-case edit is the only gold-case authoring path. It is human-gated:
-  a reviewer applies one verified, public-safe intake as an ordinary Git edit.
-  There is no automated writer, and a reviewed gold case is only added, never deleted.
-- `data/all.jsonl` is written only by `scripts/project_gold_cases.py`.
-- `data/instruments.json` is written only by `scripts/sync_instruments.py` from one
-  verified assessment projection at an exact owner commit.
-
-## Required path
-
-Follow [`docs/evidence.md`](docs/evidence.md) for every gold-case change. Each split stays at or above its shipped baseline count. A
-consumer reads `data/all.jsonl` only through a Git-addressed
-`givecare.artifact-ref/v1` verified by the workspace `projection-ref` command.
+- `data/*.jsonl` holds public anonymized splits. `data/all.jsonl` is generated
+  only by `scripts/project_gold_cases.py`.
+- `data/instruments.json` is a byte copy of the assessment projection;
+  `instruments-overlay.json` contains Evals-only packaging fields.
+- `scripts/validate.py`, `project_gold_cases.py`, `sync_instruments.py` and
+  `read_instruments.py` own validation, projection and reads.
+- InvisibleBench owns runners, adapters and judge prompts. Assessment owns
+  instrument definitions. Benefits and Mira own their respective domains.
 
 ## Proof
 
-Before handoff run `scripts/check.sh`. In the workspace, also run
-`scripts/validate.py --tools-commit <full-assessment-commit>` to prove exact
-projection parity. Report only checks that ran.
+```bash
+scripts/check.sh
+python3 scripts/validate.py --tools-commit <full-assessment-commit>
+```
+
+Use `docs/evidence.md` for every gold-case edit. A reviewed public-safe edit is
+human-gated and additive; each split stays at its shipped baseline. Validate
+exact assessment projection parity before handoff. Consumers read the generated
+case set only through the Git-addressed projection reference.
 
 ## Safety
 
-- Contribute no private conversations, production traces, raw forum text, usernames,
-  identifying links, unlicensed instruments (licensing wall:
-  [assessment safety rules](../../../tools/assessment/AGENTS.md) § Safety; CWBS-14 content is excluded,
-  redistribution unconfirmed), benefits catalogs, or private prompts
-  and product internals ([`CONTRIBUTING.md`](CONTRIBUTING.md)).
-- No runner, verifier, scoring implementation, or live policy system here. A
-  failure signal never promotes itself into public data.
-- Do not present clinical, legal, or eligibility determinations as ground truth.
-- Report private or unsafe content privately per [`SECURITY.md`](SECURITY.md); never
-  in a public issue.
-
-## Gotchas
-
-- `data/all.jsonl` is generated; never hand-edit it.
-- `data/instruments.json` is a byte copy of the assessment projection, not an Evals edit;
-  the validator rejects drift.
-- `--tools-commit` must be a full commit reachable in the workspace `assessment` repo.
-
-## Pointers
-
-- Workspace map: `python3 /home/deploy/repos/givecare/scripts/givecare_protocol.py map`
-- `docs/evidence.md`: gold-case intake and rebuild.
-- `invisiblebench` imports the owner projection as candidates and owns execution
-  and verdicts. `assessment` owns executable instrument definitions and scoring.
+Do not add private conversations, production traces, raw forum text, usernames,
+identifying links, private prompts, benefits catalogs or unlicensed instruments.
+This repository contains no runner, scoring implementation or live policy system.
+Do not present an evaluation as clinical, legal, eligibility or effectiveness
+truth. The assessment licensing wall is in
+[tools/assessment](../../../tools/assessment/AGENTS.md); report unsafe material
+privately through `SECURITY.md`.
