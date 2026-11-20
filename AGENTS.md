@@ -3,7 +3,7 @@
 Type: reference.
 
 This independent repository owns public caregiver evaluation records, validators
-and instrument distribution. Global, workspace and [Safety](../../AGENTS.md)
+and instrument distribution. Global, workspace and [Safety](../AGENTS.md)
 instructions apply.
 
 ## Ownership
@@ -39,5 +39,5 @@ identifying links, private prompts, benefits catalogs or unlicensed instruments.
 This repository contains no runner, scoring implementation or live policy system.
 Do not present an evaluation as clinical, legal, eligibility or effectiveness
 truth. The assessment licensing wall is in
-[tools/assessment](../../../tools/assessment/AGENTS.md); report unsafe material
+[tools/assessment](../../tools/assessment/AGENTS.md); report unsafe material
 privately through `SECURITY.md`.

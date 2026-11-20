@@ -99,7 +99,7 @@ The instrument **definition** (question ids, prompts, GC domains, scale, and dom
 weights) is owned by [@givecare/tools](https://github.com/givecareapp/assessment).
 `data/instruments.json` is an exact byte-for-byte materialization of the
 verified `assessment` projection output
-the [assessment projection](../../../tools/assessment/data/instruments-export.json). Update
+the [assessment projection](../../tools/assessment/data/instruments-export.json). Update
 it only with
 `python3 scripts/sync_instruments.py --owner-commit <full-assessment-commit>`.
 The command verifies the shared ArtifactRef and exact digest through the
